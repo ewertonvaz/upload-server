@@ -3,12 +3,10 @@ import AWS from "aws-sdk";
 //import bodyParser from "body-parser";
 
 const s3 = new AWS.S3()
-const app = express()
-
 const S3Routes = new Router();
 //app.use(bodyParser.json())
 
-// curl -i https://some-app.cyclic.app/s3/myFile.txt
+// curl -i https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.get('*', async (req,res) => {
   let filename = req.path.slice(1)
 
@@ -32,7 +30,7 @@ S3Routes.get('*', async (req,res) => {
 })
 
 
-// curl -i -XPUT --data '{"k1":"value 1", "k2": "value 2"}' -H 'Content-type: application/json' https://some-app.cyclic.app/s3/myFile.txt
+// curl -i -XPUT --data '{"k1":"value 1", "k2": "value 2"}' -H 'Content-type: application/json' https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.put('*', async (req,res) => {
   let filename = req.path.slice(1)
 
@@ -48,7 +46,7 @@ S3Routes.put('*', async (req,res) => {
   res.send('ok').end()
 })
 
-// curl -i -XDELETE https://some-app.cyclic.app/s3/myFile.txt
+// curl -i -XDELETE https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.delete('*', async (req,res) => {
   let filename = req.path.slice(1)
 
