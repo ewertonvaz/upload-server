@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import fileRoutes from "./routes/file.routes.js";
+import S3Routes from "./routes/s3.routes.js";
 import ServerRoutes from "./routes/server.routes.js";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use("/file", fileRoutes);
+app.use("/s3", S3Routes);
 app.use("", ServerRoutes);
 
 app.listen( port, () => { console.log(`App up and running on http://localhost:${port}`) })
