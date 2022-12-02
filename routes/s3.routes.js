@@ -35,6 +35,7 @@ S3Routes.put('*', async (req,res) => {
   let filename = req.path.slice(1)
 
   console.log(req.body)
+  console.log(req.data)
   
   await s3.putObject({
     Body: JSON.stringify(req.body),
