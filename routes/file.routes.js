@@ -5,7 +5,7 @@ import path from "path";
 
 const fileRoutes = express.Router();
 
-fileRoutes.post('/upload', (req, res) => {
+fileRoutes.put('/upload', (req, res) => {
     const form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files) => {
         //console.dir(req.headers);
