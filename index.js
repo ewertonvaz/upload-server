@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import fileRoutes from "./routes/file.routes.js";
+import ServerRoutes from "./routes/server.routes.js";
 
 dotenv.config();
 
@@ -17,5 +18,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/file", fileRoutes);
+app.use("", ServerRoutes);
 
 app.listen( port, () => { console.log(`App up and running on http://localhost:${port}`) })
