@@ -42,7 +42,7 @@ S3Routes.put('*', async (req,res) => {
   
   //await s3.putObject({
   await s3.upload({
-    Body: fileStream,
+    Body: files.file.filepath,
     Bucket: process.env.BUCKET,
     Key: filename,
   }).promise()
