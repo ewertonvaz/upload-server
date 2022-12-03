@@ -38,11 +38,10 @@ S3Routes.put('*', async (req,res) => {
     const extension = files.file.originalFilename.split('.');
     const filename = files.file.newFilename + "." + extension[ extension.length - 1 ];
     console.log(filename);
-    const fileStream = fs.createReadStream(files.file.filepath);
-  
-  //await s3.putObject({
-  await s3.upload({
-    Body: fileStream,
+q  
+  await s3.putObject({
+  //await s3.upload({
+    Body: fs.readFileSync(files.file.filepath),
     Bucket: process.env.BUCKET,
     Key: filename,
   }).promise()
