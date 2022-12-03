@@ -37,9 +37,10 @@ S3Routes.put('*', async (req,res) => {
     const extension = files.file.originalFilename.split('.');
     const filename = files.file.newFilename + "." + extension[ extension.length - 1 ];
     console.log(filename);
+    console.log(req);
   
   await s3.putObject({
-    Body: JSON.stringify(req.body),
+    Body: files.file.filepath,
     Bucket: process.env.BUCKET,
     Key: filename,
   }).promise()
