@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AWS from "aws-sdk";
-//import bodyParser from "body-parser";
+import formidable from "formidable";
 
 const s3 = new AWS.S3()
 const S3Routes = new Router();
@@ -32,9 +32,11 @@ S3Routes.get('*', async (req,res) => {
 
 // curl -i -XPUT --data '{"k1":"value 1", "k2": "value 2"}' -H 'Content-type: application/json' https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.put('*', async (req,res) => {
-  let filename = req.path.slice(1)
-
-  console.log(req.body)
+  const form = new formidable.IncomingForm();
+  form.parse(req, async (err, fields, files) => {
+    const extension = files.file.originalFilename.split('.');
+    const filename = files.file.newFilename + "." + extension[ extension.length - 1 ];
+    console.log(filename);
   
   await s3.putObject({
     Body: JSON.stringify(req.body),
@@ -42,8 +44,9 @@ S3Routes.put('*', async (req,res) => {
     Key: filename,
   }).promise()
 
-  res.set('Content-type', 'text/plain')
-  res.send('ok').end()
+    res.set('Content-type', 'text/plain')
+    res.send('ok').end();
+  });
 })
 
 // curl -i -XDELETE https://ecv-upload-server.cyclic.app/s3/myFile.txt
