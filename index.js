@@ -17,6 +17,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use(express.static('public'));
 app.use(express.json());
 app.use("/file", fileRoutes);
 app.use("/s3", S3Routes);
