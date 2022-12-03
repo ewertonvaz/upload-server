@@ -44,6 +44,8 @@ S3Routes.put('*', async (req,res) => {
       Body: fs.readFileSync(files.file.filepath),
       Bucket: process.env.BUCKET,
       Key: filename,
+      ContentType : files.file.mimetype,
+      ContentLength : files.file.size
     }).promise()
 
     res.set('Content-type', 'text/plain')
