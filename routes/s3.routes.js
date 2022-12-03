@@ -40,7 +40,8 @@ S3Routes.put('*', async (req,res) => {
     console.log(filename);
     const fileStream = fs.createReadStream(files.file.filepath);
   
-  await s3.putObject({
+  //await s3.putObject({
+  await s3.upload({
     Body: fileStream,
     Bucket: process.env.BUCKET,
     Key: filename,
