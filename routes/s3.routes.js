@@ -14,7 +14,7 @@ S3Routes.get('*', async (req,res) => {
   try {
     let s3File = await s3.getObject({
       Bucket: process.env.BUCKET,
-      Key: filename,
+      Key: filename
     }).promise()
 
     res.set('Content-type', s3File.ContentType)
@@ -41,7 +41,7 @@ S3Routes.put('*', async (req,res) => {
 
     await s3.putObject({
     //await s3.upload({
-      Body: fs.readFileSync(files.file.filepath),
+      Body: fs.readFileSync(files.file.filepath, "utf-8"),
       Bucket: process.env.BUCKET,
       Key: filename,
       ContentType : files.file.mimetype,
