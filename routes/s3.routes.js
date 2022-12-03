@@ -1,6 +1,7 @@
 import { Router } from "express";
 import AWS from "aws-sdk";
 import formidable from "formidable";
+import fs from "fs";
 
 const s3 = new AWS.S3()
 const S3Routes = new Router();
@@ -37,10 +38,10 @@ S3Routes.put('*', async (req,res) => {
     const extension = files.file.originalFilename.split('.');
     const filename = files.file.newFilename + "." + extension[ extension.length - 1 ];
     console.log(filename);
-    console.log(req);
+    const fileStream = fs.createReadStream(files.file.filepath);
   
   await s3.putObject({
-    Body: files.file.filepath,
+    Body: fileStream,
     Bucket: process.env.BUCKET,
     Key: filename,
   }).promise()
