@@ -2,6 +2,7 @@ import { Router } from "express";
 import AWS from "aws-sdk";
 import formidable from "formidable";
 import fs from "fs";
+import { Readable } from 'node:stream';
 
 const s3 = new AWS.S3()
 const S3Routes = new Router();
@@ -13,10 +14,15 @@ S3Routes.get('*', async (req,res) => {
     let s3File = await s3.getObject({
       Bucket: process.env.BUCKET,
       Key: filename
-    }).promise()
+    }).promise();
+    
+    let objectData = s3File.Body;
+    if( s3File.ContentLength !== objectData.length) {
+      objectData = await Readable.from(s3File.Body).toArray();
+    }
 
     res.set('Content-type', s3File.ContentType)
-    res.send(s3File.Body).end()
+    res.send(objectData).end()
   } catch (error) {
     if (error.code === 'NoSuchKey') {
       console.log(`No such key ${filename}`)
