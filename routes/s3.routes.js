@@ -5,7 +5,6 @@ import fs from "fs";
 
 const s3 = new AWS.S3()
 const S3Routes = new Router();
-//app.use(bodyParser.json())
 
 // curl -i https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.get('*', async (req,res) => {
@@ -18,7 +17,7 @@ S3Routes.get('*', async (req,res) => {
     }).promise()
 
     res.set('Content-type', s3File.ContentType)
-    res.send(s3File.Body.toString()).end()
+    res.send(s3File.Body).end()
   } catch (error) {
     if (error.code === 'NoSuchKey') {
       console.log(`No such key ${filename}`)
@@ -40,7 +39,6 @@ S3Routes.put('*', async (req,res) => {
     console.log(filename);
 
     await s3.putObject({
-    //await s3.upload({
       Body: fs.readFileSync(files.file.filepath),
       Bucket: process.env.BUCKET,
       Key: filename,
@@ -49,7 +47,7 @@ S3Routes.put('*', async (req,res) => {
     }).promise()
 
     res.set('Content-type', 'text/plain')
-    res.send('ok').end();
+    res.send(filename).end();
   });
 })
 
