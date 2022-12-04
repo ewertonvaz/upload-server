@@ -47,7 +47,7 @@ S3Routes.put('*', async (req,res) => {
     }).promise()
 
     res.set('Content-type', 'text/plain')
-    res.send('ok').end();
+    res.send(filename).end();
   });
 })
 
