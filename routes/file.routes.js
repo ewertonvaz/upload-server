@@ -31,11 +31,14 @@ fileRoutes.get('/download/:fileName', (req, res) => {
     const { fileName } = req.params;
     try {
         const file = path.resolve("./") + `/uploaded/${fileName}`;
-        console.log(file);
-        res.sendFile(file);
+        if (fs.existsSync(file)) {
+            res.status(200).sendFile(file);
+        } else {
+            res.status(404).json("File not found!");
+        }
     } catch (e) {
         console.log(e);
-        return res.status(500).json("Não foi possíve fazer o download este arquivo!");
+        return res.status(500).json("Erro interno! Não foi possível fazer o download este arquivo!");
     }
 });
 

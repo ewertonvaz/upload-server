@@ -6,7 +6,6 @@ import fs from "fs";
 const s3 = new AWS.S3()
 const S3Routes = new Router();
 
-// curl -i https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.get('*', async (req,res) => {
   let filename = req.path.slice(1)
 
@@ -30,7 +29,6 @@ S3Routes.get('*', async (req,res) => {
 })
 
 
-// curl -i -XPUT --data '{"k1":"value 1", "k2": "value 2"}' -H 'Content-type: application/json' https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.put('*', async (req,res) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
@@ -46,20 +44,19 @@ S3Routes.put('*', async (req,res) => {
       ContentLength : files.file.size
     }).promise()
 
-    res.set('Content-type', 'text/plain')
-    res.send(filename).end();
+    res.status(200).json({ filename: filename });
   });
 })
 
-// curl -i -XDELETE https://ecv-upload-server.cyclic.app/s3/myFile.txt
 S3Routes.delete('*', async (req,res) => {
   let filename = req.path.slice(1)
 
-  await s3.deleteObject({
+  const result = await s3.deleteObject({
     Bucket: process.env.BUCKET,
     Key: filename,
   }).promise()
 
+  console.log(result);
   res.set('Content-type', 'text/plain')
   res.send('ok').end()
 })
@@ -67,7 +64,7 @@ S3Routes.delete('*', async (req,res) => {
 // /////////////////////////////////////////////////////////////////////////////
 // Catch all handler for all other request.
 S3Routes.use('*', (req,res) => {
-  res.sendStatus(404).end()
+  res.status(404).end();
 })
 
 export default S3Routes;
